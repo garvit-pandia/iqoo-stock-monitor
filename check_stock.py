@@ -1,4 +1,4 @@
-import re, os, sys
+import re, os, sys, datetime
 from urllib.request import Request, urlopen, URLError
 from urllib.parse import urlencode
 
@@ -14,6 +14,12 @@ def send_alert(text):
             f"https://api.telegram.org/bot{bot_token}/sendMessage",
             data, timeout=15
         )
+
+# Daily heartbeat at 9:00 AM IST (3:30 UTC)
+now = datetime.datetime.now(datetime.UTC)
+if now.hour == 3 and 25 <= now.minute <= 35:
+    send_alert("✅ Heartbeat — iQOO stock monitor is still running.")
+    print("Heartbeat sent")
 
 try:
     req = Request(URL, headers={"User-Agent": "Mozilla/5.0 (X11; Linux x86_64)"})
